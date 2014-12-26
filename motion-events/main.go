@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -20,6 +21,8 @@ func init() {
 }
 
 func main() {
+	flag.Parse()
+
 	r := pat.New()
 
 	r.Post("/event", http.HandlerFunc(HandleEvent))
@@ -32,8 +35,8 @@ func main() {
 // newPool creates a new Redis connection pool
 func newPool() *redis.Pool {
 	var server = ":6379"
-	if os.Getenv("REDIS_PORT_TCP_ADDR") != "" {
-		server = os.Getenv("REDIS_PORT_TCP_ADDR") + ":" + os.Getenv("REDIS_PORT_TCP_PORT")
+	if os.Getenv("REDIS_PORT_6379_TCP_ADDR") != "" {
+		server = os.Getenv("REDIS_PORT_6379_TCP_ADDR") + ":" + os.Getenv("REDIS_PORT_6379_TCP_PORT")
 	}
 
 	return &redis.Pool{
