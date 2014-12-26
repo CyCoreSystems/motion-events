@@ -1,0 +1,27 @@
+[Unit]
+Description=Redis server
+After=docker.service
+RequiresMountsFor=/var/lib/cam
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=/usr/sbin/sysctl vm.overcommit_memory=1
+ExecStartPre=/usr/bin/sh -c '/usr/bin/echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+ExecStartPre=/usr/bin/sh -c '/usr/bin/echo 512 > /proc/sys/net/core/somaxconn'
+ExecStartPre=-/usr/bin/docker pull redis
+ExecStartPre=-/usr/bin/docker pull ibuildthecloud/systemd-docker
+ExecStartPre=-/usr/bin/docker run --rm -v /opt/bin:/opt/bin ibuildthecloud/systemd-docker
+ExecStartPre=/usr/bin/mkdir -p /etc/redis
+ExecStartPre=/usr/bin/touch /etc/redis/redis.conf
+ExecStartPre=/usr/bin/mkdir -p /var/lib/cam/redis
+ExecStart=/opt/bin/systemd-docker --env run --rm --name redis -p 6379:6379 -v /etc/redis:/etc/redis -v /var/lib/cam/redis:/data redis redis-server /etc/redis/redis.conf
+LimitNOFILE=64000
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target
