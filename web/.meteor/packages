@@ -11,3 +11,5 @@ fortawesome:fontawesome
 less
 iron:router
 rcy:nouislider
+mjpeg-proxy-server
+reactive-var
