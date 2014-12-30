@@ -1,0 +1,56 @@
+@import 'color.import.less';
+@import 'fonts.import.less';
+@import 'rules.import.less';
+@import 'base.import.less';
+
+
+body { width: 100%; height: 100%; 
+	.background-linear-gradient(@lightestgrey, @grey);
+}
+
+#page {
+	width: 1000px;
+	background-color: white;
+	.unit;
+	margin: 0 auto;
+	position: absolute;
+		left: 50%;
+		margin-left: -500px;
+}
+
+h1 { text-align: center; margin-left: 0; }
+
+.side { 
+	width: 200px; 
+	margin: 0 50px;	
+	li { 
+		width: 100%;
+		margin: 20px;
+		font-size: 2em;
+	
+		a { font-size: 1.2em; }
+	}
+	
+	
+}
+li.pick { margin: 50px 0 10px -30px; color: @grey; }
+
+
+.main { width: 640px; margin: 0 auto; }
+	#picture {
+		width: 640px;
+		height: 480px;
+		background-color: @lightergrey;	
+	}
+
+
+#timepicker {
+	width: 100%;
+	height: 100px;
+	background-color: @grey;
+}
+#timepickercontrols {}
+
+
+
+
