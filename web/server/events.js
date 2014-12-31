@@ -8,6 +8,7 @@ Router.map(function() {
       path: '/event',
       where: 'server',
       action: function() {
+         console.log("Received event from motion");
          var req;
 
          if(this.request.method !== 'POST') {
@@ -15,27 +16,23 @@ Router.map(function() {
             this.response.end("Unhandled method");
          }
 
-         try {
-            req = JSON.decode(this.request.body);
-         } catch(err) {
-            this.response.writeHead(400);
-            this.response.end("Bad Request");
-            return;
-         }
+         req = this.request.body;
 
          // Find the camera to which this event is associated
+         console.log("Finding camera by map:",req.camera);
          var camera = cameraMap[parseInt(req.camera)];
 
          switch(req.event) {
             case 'start':
+               console.log("Start event");
                // Add an event record
                var eventId = Events.insert({
-                  _id: eventId,
                   camera: camera,
                   timestamp: new Date()
                });
 
                // Add a temporary map
+               console.log("Adding map:",eventId,req.number);
                EventMaps.insert({
                   eventId: eventId,
                   number: req.number
