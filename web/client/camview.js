@@ -49,4 +49,14 @@ Template.camview.helpers({
    'cameraUrl': function(cam) {
       return Meteor.absoluteUrl("stream/"+cam);
    },
+   'activeCamera': function(cam) {
+      if( Session.equals('camera',cam) ) {
+         return 'active';
+      }
+   },
+   'activeMode': function(mode) {
+      if( Session.equals('mode',mode) ) {
+         return 'active';
+      }
+   },
    });
