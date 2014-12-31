@@ -48,7 +48,7 @@ li.pick { margin: 50px 0 10px -30px; color: @grey; }
 		* { .border-radius(10px 10px 0 0); }
 	}
 
-
+.hide { display: none; }
 
 #timepicker {
 	width: 100%;
@@ -58,6 +58,42 @@ li.pick { margin: 50px 0 10px -30px; color: @grey; }
 	position: relative;
 
 }
+#forward, #back {
+	position: absolute;
+		height: 480px;
+		top: -480px;
+	background: transparent;
+}
+	#forward i, #back i {
+		font-size: 100px;
+		color: white;
+		opacity: 0.2;
+		text-shadow: 0 0 2px black;
+		line-height: 480px;
+		margin: 5px;
+		.fasttrans;
+	}
+		#forward:hover i, #back:hover i { opacity: 0.5; .fasttrans; }
+
+	#forward { right: 0; }
+	#back { left: 0; }
+
+#timestamp { 
+	position: absolute;
+		top: -480px;
+		left: 0px;
+	width: 640px;
+	height: 100px;
+	text-align: center;
+	font-weight: bold;
+	color: white;
+	text-shadow: 0 0 1px black;
+	font-size: 32px;
+	margin-top: 7px;
+
+}
+
+
 #timepickercontrols {
 	position: absolute;
 		bottom: 0;
