@@ -18,7 +18,9 @@ body { width: 100%;
 		margin-left: -500px;
 }
 
-h1 { text-align: center; margin-left: 0; }
+h1 { 
+	text-align: center; 
+}
 
 .side { 
 	width: 200px; 
@@ -81,15 +83,14 @@ li.pick { margin: 50px 0 10px -30px; color: @grey; }
 #timestamp { 
 	position: absolute;
 		top: -480px;
-		left: 0px;
-	width: 640px;
+		right: 0px;
+	width: 290px;
 	height: 100px;
-	text-align: center;
 	font-weight: bold;
 	color: white;
 	text-shadow: 0 0 1px black;
 	font-size: 32px;
-	margin-top: 7px;
+	margin-top: 5px;
 
 }
 
@@ -114,6 +115,18 @@ li.pick { margin: 50px 0 10px -30px; color: @grey; }
 .noUi-base { background: @grey; }
 .noUi-origin { background: @transblack; }
 .noUi-origin + .noUi-origin { background: @grey; }
-.noUi-handle { background: @lightwhite; margin-top: 3px; }
+.noUi-handle { 
+	background: fadeout(@lightlightblue, 95%); 
+	margin-top: 3px; 
+	.box-shadow(inset 0 0 7px 0 @transblack);
+	border: 5px solid @transblack; 
+	width: 28px !important;
+}
+	.noUi-handle:before, .noUi-handle:after {
+		top: 2px;
+		background: @lightgrey;
+		margin-left: -7px;
+	}
+		
 
 
