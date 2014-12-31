@@ -20,6 +20,9 @@
 	<div id="picture">
 		<img src="{{cameraUrl 'front'}}" width="640" height="480" class="{{showHide 'front'}}"/>
 		<img src="{{cameraUrl 'side'}}" width="640" height="480" class="{{showHide 'side'}}"/>
+		<video controls autoplay name="recorded" width="640" height="480" class="{{showVideo}}">
+			<source src="{{videoUrl}}" type="video/mp4"/>
+		</video>
 	</div>
 
 	<div class="recorded {{showHideMode 'recorded'}}" id="timepicker">

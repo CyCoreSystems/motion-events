@@ -42,9 +42,17 @@ Template.camview.helpers({
       return Session.equals('mode',mode);
    },
    'showHide': function(cam) {
-      if( !Session.equals('camera',cam) ) {
+      if( !Session.equals('camera',cam) || Session.equals('mode','recorded') ) {
          return 'hide';
       }
+   },
+   'showVideo': function() {
+      if( Session.equals('mode','live') ) {
+         return 'hide';
+      }
+   },
+   'videoUrl': function() {
+      return "/target/side/99-20141229204022.avi";
    },
    'cameraUrl': function(cam) {
       return Meteor.absoluteUrl("stream/"+cam);
