@@ -1,6 +1,6 @@
 var cameraUrls = {
-   'front': "http://localhost:5080",
-   'side': "http://localhost:5081"
+   'front': Meteor.absoluteUrl("stream/front"),
+   'side': Meteor.absoluteUrl("stream/side")
 };
 
 Template.camview.rendered = function() {
@@ -23,8 +23,19 @@ Template.camview.events({
    'click a[name=side]': function() { Session.set('camera','side'); }
 })
 
+// NOTE:  we show/hide the separate images rather
+// than swapping out the source because Chrome (at least)
+// gets confused and fails to properly stream when
+// only the source is changed.
+// This way creates two constant streams, but they are
+// reliable.
 Template.camview.helpers({
-   'cameraFeedUrl': function() {
-      return cameraUrls[Session.get('camera')];
-   }
+   'showHide': function(cam) {
+      if( !Session.equals('camera',cam) ) {
+         return 'hide';
+      }
+   },
+   'cameraUrl': function(cam) {
+      return Meteor.absoluteUrl("stream/"+cam);
+   },
    });

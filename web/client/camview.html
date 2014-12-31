@@ -18,7 +18,8 @@
 <div class="main">
 
 	<div id="picture">
-		<img src="{{cameraFeedUrl}}" width="640" height="480"/>
+		<img src="{{cameraUrl 'front'}}" width="640" height="480" class="{{showHide 'front'}}"/>
+		<img src="{{cameraUrl 'side'}}" width="640" height="480" class="{{showHide 'side'}}"/>
 	</div>
 
 	<div class="recorded" id="timepicker">
