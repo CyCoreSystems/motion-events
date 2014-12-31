@@ -7,8 +7,8 @@
 
 <ul>
 	<li class="pick">View</li>
-	<li><a href="">Live</a></li>
-	<li><a href="">Recorded</a></li>
+	<li><a name="live" href="">Live</a></li>
+	<li><a name="recorded" href="">Recorded</a></li>
 	<li class="pick">Camera</li>
 	<li><a name="front" href="">Front</a></li>
 	<li><a name="side" href="">Side</a></li>
@@ -22,7 +22,7 @@
 		<img src="{{cameraUrl 'side'}}" width="640" height="480" class="{{showHide 'side'}}"/>
 	</div>
 
-	<div class="recorded" id="timepicker">
+	<div class="recorded {{showHideMode 'recorded'}}" id="timepicker">
 		IF Capture, histogram goes here
 		if live, apply .hide
 		<div id="recordedcontrols">

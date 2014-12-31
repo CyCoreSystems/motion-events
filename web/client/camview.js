@@ -4,6 +4,7 @@ var cameraUrls = {
 };
 
 Template.camview.rendered = function() {
+   Session.setDefault('mode','live');
    Session.setDefault('camera','front');
 
    $('#timepickercontrols').noUiSlider({
@@ -19,8 +20,10 @@ Template.camview.rendered = function() {
 }
 
 Template.camview.events({
-   'click a[name=front]': function() { Session.set('camera','front'); },
-   'click a[name=side]': function() { Session.set('camera','side'); }
+   'click a[name=live]': function(e) { e.preventDefault(); Session.set('mode','live'); },
+   'click a[name=recorded]': function(e) { e.preventDefault(); Session.set('mode','recorded'); },
+   'click a[name=front]': function(e) { e.preventDefault(); Session.set('camera','front'); },
+   'click a[name=side]': function(e) { e.preventDefault(); Session.set('camera','side'); }
 })
 
 // NOTE:  we show/hide the separate images rather
@@ -30,6 +33,14 @@ Template.camview.events({
 // This way creates two constant streams, but they are
 // reliable.
 Template.camview.helpers({
+   'showHideMode': function(mode) {
+      if( !Session.equals('mode',mode) ) {
+         return 'hide';
+      }
+   },
+   'isMode': function(mode) {
+      return Session.equals('mode',mode);
+   },
    'showHide': function(cam) {
       if( !Session.equals('camera',cam) ) {
          return 'hide';
