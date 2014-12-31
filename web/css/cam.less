@@ -57,18 +57,27 @@ li.pick { margin: 50px 0 10px -30px; color: @grey; }
 	background-color: @transblack;
 	position: relative;
 
-	* { width: 100%; margin: 0 auto; }
 }
 #timepickercontrols {
 	position: absolute;
 		bottom: 0;
 	width: 100%;
-	height: 30px;
-	padding: 0 2%;
-	background: @transblack;
+	height: 23px;
 	.border-radius(0 0 10px 10px);
+
 }
 
+.noUi-base {
+	.border-radius(0 0 10px 10px);
+	color: @lightestgrey;
+}
+.noUi-target { 
+	border: 0 none; .box-shadow(none);
+}
+
+.noUi-base { background: @grey; }
+.noUi-origin { background: @transblack; }
+.noUi-origin + .noUi-origin { background: @grey; }
 
 
 
