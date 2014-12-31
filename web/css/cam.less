@@ -47,8 +47,11 @@ li.pick { margin: 50px 0 10px -30px; color: @grey; }
 		background-color: @lightergrey;	
 		.border-radius(10px 10px 0 0);
 	
-		* { .border-radius(10px 10px 0 0); }
+		* { .border-radius(10px); z-index: 10; position: relative;}
+		
 	}
+
+
 
 .hide { display: none; }
 
@@ -58,6 +61,9 @@ li.pick { margin: 50px 0 10px -30px; color: @grey; }
 	.border-radius(0 0 10px 10px);
 	background-color: @transblack;
 	position: relative;
+		padding: 20px 0 0 0 ;
+		top: -20px;
+	z-index: 1;
 
 }
 #forward, #back {
@@ -114,7 +120,7 @@ li.pick { margin: 50px 0 10px -30px; color: @grey; }
 
 .noUi-base { background: @grey; }
 .noUi-origin { background: @transblack; }
-.noUi-origin + .noUi-origin { background: @grey; }
+.noUi-origin + .noUi-origin { background: @grey; .border-radius(0 0 10px 0);}
 .noUi-handle { 
 	background: fadeout(@lightlightblue, 95%); 
 	margin-top: 3px; 
