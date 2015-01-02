@@ -34,13 +34,17 @@
 	<div class="recorded {{showHideMode 'recorded'}}" id="timepicker">
 		{{> histogram}}
 		<div id="recordedcontrols">
-			<div id="forward"><i class="fa fa-caret-right"></i></div>
-			<div id="play"><i class="fa fa-caret-right"></i></div>
-			<div id="back"><i class="fa fa-caret-left"></i></div>
+			<div id="forward"><i class="fa fa-angle-right"></i></div>
+			<div id="back"><i class="fa fa-angle-left"></i></div>
+			
 			<div id="timestamp">{{eventTime}}</div>
-			<div id="prevDay"><i class="fa fa-backward"></i></div>
-			<div id="nextDay"><i class="fa fa-forward"></i></div>
-			{{currentDate}}
+			
+			<div id="play"><i class="fa fa-caret-right"></i></div>
+			<div id="daycontrols">	
+				<div id="prevDay"><i class="fa fa-angle-double-left"></i></div>
+				{{currentDate}}
+				<div id="nextDay"><i class="fa fa-angle-double-right"></i></div>
+			</div>
 		</div>
 		<!--
 		<div id="timepickercontrols">
