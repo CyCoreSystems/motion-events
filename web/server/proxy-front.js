@@ -11,7 +11,13 @@ Meteor.startup(function() {
 });
 
 connectFront = function() {
-   var reqFront = http.get("http://172.30.105.140:8081/");
+   var reqFront;
+   try {
+      reqFront = http.get("http://172.30.105.140:8081/");
+   } catch(err) {
+      console.log("Failed to connect to motion web server; retrying in a moment...");
+      setTimeout(connectFront,1000);
+   }
    reqFront.on('response',function(rep) {
       ProxyFront = rep;
 
@@ -27,7 +33,13 @@ connectFront = function() {
 }
 
 connectSide = function() {
-   var reqSide = http.get("http://172.30.105.140:8082/");
+   var reqSide;
+   try {
+      reqSide = http.get("http://172.30.105.140:8082/");
+   } catch(err) {
+      console.log("Failed to connect to motion web server; retrying in a moment...");
+      setTimeout(connectSide,1000);
+   }
    reqSide.on('response',function(rep) {
       ProxySide = rep;
 
