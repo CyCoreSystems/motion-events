@@ -99,6 +99,9 @@ Template.camview.helpers({
       }
       return;
    },
+   'currentDate': function() {
+      return moment(Session.get('startTime')).format("ddd, D MMM")
+   },
    'imageUrl': function() {
       var currentEvent = Session.get('currentEvent');
       var hoveredEvent = Session.get('hoveredEvent');
