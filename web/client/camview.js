@@ -92,10 +92,10 @@ Template.camview.helpers({
       var currentEvent = Session.get('currentEvent');
       var hoveredEvent = Session.get('hoveredEvent');
       if(hoveredEvent) {
-         return Events.findOne(hoveredEvent).timestamp.toLocaleString();
+         return moment(Events.findOne(hoveredEvent).timestamp).format("MM/DD h:mma").toLocaleString();
       }
       if(currentEvent) {
-         return Events.findOne(currentEvent).timestamp.toLocaleString();
+         return moment(Events.findOne(currentEvent).timestamp).format("MM/DD h:mma").toLocaleString();
       }
       return;
    },
