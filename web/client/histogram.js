@@ -13,7 +13,6 @@ Meteor.autorun(function() {
    // Set defaults
    var thisMorning = moment(0,"HH");
    Session.setDefault('startTime',thisMorning.valueOf());
-   Session.setDefault('endTime', thisMorning.add(1,'d').valueOf());
 });
 
 Template.histogram.rendered = function() {
@@ -21,7 +20,6 @@ Template.histogram.rendered = function() {
 
    var thisMorning = moment(0,"HH");
    Session.set('startTime',thisMorning.valueOf());
-   Session.set('endTime', thisMorning.add(1,'d').valueOf());
 
    // Update the event times
    updateEventTimes();
@@ -41,15 +39,14 @@ drawHistogram = function() {
    updateEventTimes();
 
    // Set x-scale
-   var end = Session.get('endTime') - Session.get('startTime');
    x = d3.scale.linear()
-      .domain([0,end])
+      .domain([0,moment.duration(1,'d')])
       .range([0,width]);
 
    // Update data
    data = d3.layout.histogram()
       .value(function(d) { return d.value; })
-      .range([0,Session.get('endTime') - Session.get('startTime')])
+      .range([0,moment.duration(1,'d')])
       //.bins(x.ticks(slots))(eventTimes);
       .bins(24)(eventTimes);
 
@@ -127,7 +124,7 @@ updateEventTimes = function() {
       camera: camera,
       timestamp: { 
          $gte: new Date(start),
-         $lt: new Date(Session.get('endTime'))
+         $lt: moment(start).add(1,'d').toDate()
       }
    },{ sort: ['timestamp'] }).fetch(),function(e) {
       // Value needs to be zero-based for graphing
@@ -145,7 +142,6 @@ updateEventTimes = function() {
 Tracker.autorun( function() {
    var camera = Session.get('camera');
    var start = Session.get('startTime');
-   var end = Session.get('endTime');
    if( Events.find().count() < 1 ) {
       return;
    }

@@ -30,6 +30,12 @@ Template.camview.events({
       Session.set('playback',true);
    },
    'ended video': function(e) { Session.set('playback',false); },
+   'click div#prevDay': function(e) {
+      Session.set('startTime',moment(Session.get('startTime')).subtract(1,'d').valueOf())
+   },
+   'click div#nextDay': function(e) {
+      Session.set('startTime',moment(Session.get('startTime')).add(1,'d').valueOf())
+   },
    'click div#forward': function() {
       var current = Events.findOne(Session.get('currentEvent'));
       if(!current) { return; }
