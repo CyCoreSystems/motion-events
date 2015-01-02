@@ -41,10 +41,15 @@ Router.map(function() {
 
       // Send the header
       this.response.writeHead(200,{
+         'Last-Modified': fsStat.mtime.toUTCString(),
          'Content-Type': contentType,
          'Content-Length': contentLength
       });
 
+      if( this.request.method == "HEAD" ) {
+         this.response.end();
+         return;
+      }
       // Send the file
       fStream.pipe(this.response);
 
