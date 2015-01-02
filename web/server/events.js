@@ -33,11 +33,14 @@ Router.map(function() {
 
                // Add a temporary map
                console.log("Adding map:",eventId,req.number);
-               EventMaps.insert({
+               EventMaps.update({
+                  camera: camera,
+                  number: req.number
+               },{
                   eventId: eventId,
                   camera: camera,
                   number: req.number
-               });
+               },{upsert:true});
                break;
             case 'image':
                console.log("Image event:",req)
