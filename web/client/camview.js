@@ -25,7 +25,27 @@ Template.camview.events({
    'click a[name=live]': function(e) { e.preventDefault(); Session.set('mode','live'); },
    'click a[name=recorded]': function(e) { e.preventDefault(); Session.set('mode','recorded'); },
    'click a[name=front]': function(e) { e.preventDefault(); Session.set('camera','front'); },
-   'click a[name=side]': function(e) { e.preventDefault(); Session.set('camera','side'); }
+   'click a[name=side]': function(e) { e.preventDefault(); Session.set('camera','side'); },
+   'click div#forward': function() {
+      var current = Events.findOne(Session.get('currentEvent'));
+      if(!current) { return; }
+      var next = Events.findOne({
+         camera: Session.get('camera'),
+         timestamp: { $gt: current.timestamp }
+      },{ sort: { timestamp: 1 } })
+      if(!next) { return; }
+      Session.set('currentEvent',next._id);
+   },
+   'click div#back': function() {
+      var current = Events.findOne(Session.get('currentEvent'));
+      if(!current) { return; }
+      var next = Events.findOne({
+         camera: Session.get('camera'),
+         timestamp: { $lt: current.timestamp }
+      },{ sort: { timestamp: -1} })
+      if(!next) { return; }
+      Session.set('currentEvent',next._id);
+   }
 })
 
 // NOTE:  we show/hide the separate images rather
@@ -60,8 +80,14 @@ Template.camview.helpers({
    },
    'eventTime': function() {
       var currentEvent = Session.get('currentEvent');
-      if(!currentEvent) { return; }
-      return Events.findOne(currentEvent).timestamp.toLocaleString();
+      var hoveredEvent = Session.get('hoveredEvent');
+      if(hoveredEvent) {
+         return Events.findOne(hoveredEvent).timestamp.toLocaleString();
+      }
+      if(currentEvent) {
+         return Events.findOne(currentEvent).timestamp.toLocaleString();
+      }
+      return;
    },
    'imageUrl': function() {
       var currentEvent = Session.get('currentEvent');
