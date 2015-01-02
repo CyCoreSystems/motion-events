@@ -1,7 +1,7 @@
 var fs = Npm.require('fs');
 
 Router.map(function() {
-   this.route('/target/:camera//:filename',{
+   this.route('/target/:camera//:filename',function() {
       this.redirect('/target/'+this.params.camera+'/'+this.params.filename);
    });
    this.route('/target/:camera/:filename', function() {
