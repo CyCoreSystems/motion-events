@@ -26,6 +26,10 @@ Template.camview.events({
    'click a[name=recorded]': function(e) { e.preventDefault(); Session.set('mode','recorded'); },
    'click a[name=front]': function(e) { e.preventDefault(); Session.set('camera','front'); },
    'click a[name=side]': function(e) { e.preventDefault(); Session.set('camera','side'); },
+   'click div#play': function() {
+      Session.set('playback',true);
+   },
+   'ended video': function(e) { Session.set('playback',false); },
    'click div#forward': function() {
       var current = Events.findOne(Session.get('currentEvent'));
       if(!current) { return; }
