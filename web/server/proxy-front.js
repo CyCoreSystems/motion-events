@@ -6,6 +6,11 @@ var sideClients = [];
 var http = Npm.require('http');
 
 Meteor.startup(function() {
+   connectFront();
+   connectSide();
+});
+
+connectFront = function() {
    var reqFront = http.get("http://172.30.105.140:8081/");
    reqFront.on('response',function(rep) {
       ProxyFront = rep;
@@ -16,8 +21,12 @@ Meteor.startup(function() {
             c.write(chunk, 'binary');
          });
       });
+      ProxyFront.on('close', connectFront);
    })
 
+}
+
+connectSide = function() {
    var reqSide = http.get("http://172.30.105.140:8082/");
    reqSide.on('response',function(rep) {
       ProxySide = rep;
@@ -28,25 +37,10 @@ Meteor.startup(function() {
             c.write(chunk, 'binary');
          });
       });
+      ProxySide.on('close', connectSide);
    })
 
-   /*
-   if(typeof(Proxy) == 'undefined') {
-      console.log("Cannot start proxies without proxy package");
-      return;
-   }
-
-   console.log("Starting Front camera proxy");
-   ProxyFront = new Proxy("http://admin:admin@172.30.105.215/media/?action=stream",{
-      port: 5080
-   });
-
-   console.log("Starting Side camera proxy");
-   ProxySide = new Proxy("http://admin:admin@172.30.105.219/media/?action=stream",{
-      port: 5081
-   });
-   */
-});
+}
 
 Router.map(function() {
    this.route('frontProxy', {
