@@ -20,20 +20,28 @@
 	<div id="picture">
 		<img src="{{cameraUrl 'front'}}" width="640" height="480" class="{{showHide 'front'}}"/>
 		<img src="{{cameraUrl 'side'}}" width="640" height="480" class="{{showHide 'side'}}"/>
-		<video controls autoplay name="recorded" width="640" height="480" class="{{showVideo}}">
-			<source src="{{videoUrl}}" type="video/mp4"/>
-		</video>
+		{{#if showRecorded}}
+			{{#if showVideo}}
+				<video controls autoplay name="recorded" width="640" height="480">
+					<source src="{{videoUrl}}" type="video/mp4"/>
+				</video>
+			{{else}}
+				<img src="{{imageUrl}}" width="640" height="480"/>
+			{{/if}}
+		{{/if}}
 	</div>
 
 	<div class="recorded {{showHideMode 'recorded'}}" id="timepicker">
-		<div id="histogram">histogram goes here</div>
+		{{> histogram}}
 		<div id="recordedcontrols">
 			<div id="forward"><i class="fa fa-caret-right"></i></div>
 			<div id="back"><i class="fa fa-caret-left"></i></div>
-			<div id="timestamp">Dec 30 01:36</div>
+			<div id="timestamp">{{eventTime}}</div>
 		</div>
+		<!--
 		<div id="timepickercontrols">
 		</div>
+		-->
 	</div>
 
 </div>

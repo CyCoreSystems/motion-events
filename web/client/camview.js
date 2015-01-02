@@ -7,6 +7,7 @@ Template.camview.rendered = function() {
    Session.setDefault('mode','live');
    Session.setDefault('camera','front');
 
+   /*
    $('#timepickercontrols').noUiSlider({
       start: [ 1440, 8640 ],
       range: {
@@ -17,6 +18,7 @@ Template.camview.rendered = function() {
       orientation: 'horizontal',
       direction: 'ltr'
    });
+   */
 }
 
 Template.camview.events({
@@ -46,13 +48,36 @@ Template.camview.helpers({
          return 'hide';
       }
    },
+   'showRecorded': function() {
+      return Session.equals('mode','recorded');
+   },
+   'showImage': function() {
+      if( Session.equals('playback',true) )
+         return 'hide'
+   },
    'showVideo': function() {
-      if( Session.equals('mode','live') ) {
-         return 'hide';
+      return Session.equals('playback',true);
+   },
+   'eventTime': function() {
+      var currentEvent = Session.get('currentEvent');
+      if(!currentEvent) { return; }
+      return Events.findOne(currentEvent).timestamp.toLocaleString();
+   },
+   'imageUrl': function() {
+      var currentEvent = Session.get('currentEvent');
+      var hoveredEvent = Session.get('hoveredEvent');
+      if(hoveredEvent) {
+         return Events.findOne(hoveredEvent).imageFile;
       }
+      if(currentEvent) {
+         return Events.findOne(currentEvent).imageFile;
+      }
+      return;
    },
    'videoUrl': function() {
-      return "/target/side/99-20141229204022.avi";
+      var currentEvent = Session.get('currentEvent');
+      if(!currentEvent) { return; }
+      return Events.findOne(currentEvent).webVideoFile;
    },
    'cameraUrl': function(cam) {
       return Meteor.absoluteUrl("stream/"+cam);

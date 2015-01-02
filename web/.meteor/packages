@@ -13,4 +13,5 @@ rcy:nouislider
 mjpeg-proxy-server
 reactive-var
 mrt:redis
-autopublish
+d3js:d3
+momentjs:moment

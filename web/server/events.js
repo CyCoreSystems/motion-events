@@ -19,8 +19,8 @@ Router.map(function() {
          req = this.request.body;
 
          // Find the camera to which this event is associated
-         console.log("Finding camera by map:",req.camera);
          var camera = cameraMap[parseInt(req.camera)];
+         console.log("Camera by map:",req.camera,camera);
 
          switch(req.event) {
             case 'start':
@@ -35,18 +35,24 @@ Router.map(function() {
                console.log("Adding map:",eventId,req.number);
                EventMaps.insert({
                   eventId: eventId,
+                  camera: camera,
                   number: req.number
                });
                break;
             case 'image':
+               console.log("Image event:",req.imagefile)
                // Find the eventId from the eventMap
-               var eventId = EventMaps.findOne({number: req.number}).eventId
+               var eventId = EventMaps.findOne({
+                  number: req.number,
+                  camera: req.camera
+               }).eventId
                if(!eventId) {
                   console.error("Unable to locate eventId from event number");
                   break;
                }
 
                // Update the event record with the image location
+               console.log("Updating eventId with image:",eventId,req.imagefile);
                Events.update(eventId,{
                   $set: {
                      imageFile: req.imagefile
@@ -54,14 +60,19 @@ Router.map(function() {
                });
                break;
             case 'video':
+               console.log("Video event:",req.videofile)
                // Find the eventId from the eventMap
-               var eventId = EventMaps.findOne({number: req.number}).eventId
+               var eventId = EventMaps.findOne({
+                  number: req.number,
+                  camera: req.camera
+               }).eventId
                if(!eventId) {
                   console.error("Unable to locate eventId from event number");
                   break;
                }
 
                // Update the event record with the video location
+               console.log("Updating eventId with video:",eventId,req.videofile);
                Events.update(eventId,{
                   $set: {
                      videoFile: req.videofile

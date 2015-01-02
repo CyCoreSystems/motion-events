@@ -8,7 +8,6 @@ Events = new Mongo.Collection('events');
 EventMaps = new Mongo.Collection('eventmaps');
 
 if(Meteor.isServer) {
-   /*
    Meteor.publish("events",function() {
       return Events.find({});
    });
@@ -16,6 +15,5 @@ if(Meteor.isServer) {
    Meteor.publish("eventmaps",function() {
       return EventMaps.find({});
    });
-   */
 }
 

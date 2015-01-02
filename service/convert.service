@@ -1,0 +1,21 @@
+[Unit]
+Description=Conversion daemon for web video
+After=docker.service
+RequiresMountsFor=/var/lib/cam
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=-/usr/bin/docker pull ulexus/motion-convert
+ExecStartPre=-/usr/bin/docker pull ibuildthecloud/systemd-docker
+ExecStartPre=-/usr/bin/docker run --rm -v /opt/bin:/opt/bin ibuildthecloud/systemd-docker
+ExecStart=/opt/bin/systemd-docker --env run --rm -v /var/lib/cam:/target --link mongo:mongo --name convert ulexus/motion-convert
+LimitNOFILE=64000
+Restart=always
+RestartSec=10s
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=120
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target

@@ -10,8 +10,10 @@ Router.map(function() {
 
       // Find the content length
       var contentLength = 0;
-      var fsStat = fs.statSync(this.url);
-      if( typeof(fsStat) == 'undefined' ) {
+      var fsStat;
+      try {
+         fsStat = fs.statSync(this.url);
+      } catch(err) {
          this.response.writeHead(404);
          this.response.write("Not found");
          return
@@ -32,6 +34,9 @@ Router.map(function() {
       }
       if( this.url.match( /jpg$/ ) ) {
          contentType = "image/jpeg";
+      }
+      if( this.url.match( /webm$/ ) ) {
+         contentType = "video/webm";
       }
 
       // Send the header
