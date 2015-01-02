@@ -24,7 +24,7 @@ Router.map(function() {
 
          switch(req.event) {
             case 'start':
-               console.log("Start event");
+               console.log("Start event",req);
                // Add an event record
                var eventId = Events.insert({
                   camera: camera,
@@ -40,14 +40,14 @@ Router.map(function() {
                });
                break;
             case 'image':
-               console.log("Image event:",req.imagefile)
+               console.log("Image event:",req)
                // Find the eventId from the eventMap
                var eventId = EventMaps.findOne({
                   number: req.number,
                   camera: req.camera
                }).eventId
                if(!eventId) {
-                  console.error("Unable to locate eventId from event number");
+                  console.log("Unable to locate eventId from event number");
                   break;
                }
 
@@ -60,14 +60,14 @@ Router.map(function() {
                });
                break;
             case 'video':
-               console.log("Video event:",req.videofile)
+               console.log("Video event:",req)
                // Find the eventId from the eventMap
                var eventId = EventMaps.findOne({
                   number: req.number,
                   camera: req.camera
                }).eventId
                if(!eventId) {
-                  console.error("Unable to locate eventId from event number");
+                  console.log("Unable to locate eventId from event number");
                   break;
                }
 
@@ -80,7 +80,7 @@ Router.map(function() {
                });
                break;
             default:
-               console.error("Unhandled event:",req.event);
+               console.log("Unhandled event:",req.event);
                this.response.writeHead(400);
                this.response.end("Unhandled event");
          }
