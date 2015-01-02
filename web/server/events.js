@@ -44,7 +44,7 @@ Router.map(function() {
                // Find the eventId from the eventMap
                var eventId = EventMaps.findOne({
                   number: req.number,
-                  camera: req.camera
+                  camera: camera
                }).eventId
                if(!eventId) {
                   console.log("Unable to locate eventId from event number");
@@ -64,7 +64,7 @@ Router.map(function() {
                // Find the eventId from the eventMap
                var eventId = EventMaps.findOne({
                   number: req.number,
-                  camera: req.camera
+                  camera: camera
                }).eventId
                if(!eventId) {
                   console.log("Unable to locate eventId from event number");
