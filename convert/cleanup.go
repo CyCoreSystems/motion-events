@@ -32,36 +32,7 @@ func Cleanup(percent int, defaultPort string) {
 
 		e := Event{}
 		for iter.Next(&e) {
-			// See what fields we have and remove them.
-			if e.VideoFile != "" {
-				err = os.Remove(e.VideoFile)
-				if err != nil {
-					glog.Errorln("Error deleting file: ", e.VideoFile)
-					break
-				}
-			} else {
-				glog.Infoln("No video file associated with current event: ", e.Id)
-			}
-			if e.ImageFile != "" {
-				err = os.Remove(e.ImageFile)
-				if err != nil {
-					glog.Errorln("Error deleting file: ", e.ImageFile)
-					break
-				}
-			} else {
-				glog.Infoln("No image file associated with current event: ", e.Id)
-			}
-			if e.WebVideoFile != "" {
-				err = os.Remove(e.WebVideoFile)
-				if err != nil {
-					glog.Errorln("Error deleting file: ", e.WebVideoFile)
-					break
-				}
-			} else {
-				glog.Infoln("No web video file associated with current event: ", e.Id)
-			}
-			// Last thing to do is remove from DB.
-			removeFromDB(e.Id, c)
+			checkAndRemove(e, c)
 			if !checkDiskSpace(percent) {
 				break
 			}
@@ -125,4 +96,54 @@ func removeFromDB(id string, c *mgo.Collection) {
 		}
 	}
 
+}
+
+func checkAndRemove(e Event, c *mgo.Collection) error {
+	var err error
+	// See what fields we have and remove them.
+	if e.VideoFile != "" {
+		_, err = os.Stat(e.VideoFile)
+		if err != nil {
+			glog.Errorln("File doesn't exist: ", e.VideoFile)
+		} else {
+			err = os.Remove(e.VideoFile)
+			if err != nil {
+				glog.Errorln("Error deleting file: ", e.VideoFile)
+				return err
+			}
+		}
+	} else {
+		glog.Infoln("No video file associated with current event: ", e.Id)
+	}
+	if e.ImageFile != "" {
+		_, err = os.Stat(e.ImageFile)
+		if err != nil {
+			glog.Errorln("File doesn't exist: ", e.ImageFile)
+		} else {
+			err = os.Remove(e.ImageFile)
+			if err != nil {
+				glog.Errorln("Error deleting file: ", e.ImageFile)
+				return err
+			}
+		}
+	} else {
+		glog.Infoln("No image file associated with current event: ", e.Id)
+	}
+	if e.WebVideoFile != "" {
+		_, err = os.Stat(e.WebVideoFile)
+		if err != nil {
+			glog.Errorln("File doesn't exist: ", e.WebVideoFile)
+		} else {
+			err = os.Remove(e.WebVideoFile)
+			if err != nil {
+				glog.Errorln("Error deleting file: ", e.WebVideoFile)
+				return err
+			}
+		}
+	} else {
+		glog.Infoln("No web video file associated with current event: ", e.Id)
+	}
+	// Last thing to do is remove from DB.
+	removeFromDB(e.Id, c)
+	return nil
 }
