@@ -32,7 +32,7 @@ func Cleanup(percent int, defaultPort string) {
 
 		e := Event{}
 		for iter.Next(&e) {
-			checkAndRemove(e, c)
+			remove(e, c)
 			if !checkDiskSpace(percent) {
 				break
 			}
