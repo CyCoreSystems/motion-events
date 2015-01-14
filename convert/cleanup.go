@@ -104,7 +104,7 @@ func checkAndRemove(e Event, c *mgo.Collection) error {
 	if e.VideoFile != "" {
 		_, err = os.Stat(e.VideoFile)
 		if err != nil {
-			glog.Errorln("File doesn't exist: ", e.VideoFile)
+			glog.Warningln("File doesn't exist: ", e.VideoFile)
 		} else {
 			err = os.Remove(e.VideoFile)
 			if err != nil {
@@ -118,7 +118,7 @@ func checkAndRemove(e Event, c *mgo.Collection) error {
 	if e.ImageFile != "" {
 		_, err = os.Stat(e.ImageFile)
 		if err != nil {
-			glog.Errorln("File doesn't exist: ", e.ImageFile)
+			glog.Warningln("File doesn't exist: ", e.ImageFile)
 		} else {
 			err = os.Remove(e.ImageFile)
 			if err != nil {
@@ -132,7 +132,7 @@ func checkAndRemove(e Event, c *mgo.Collection) error {
 	if e.WebVideoFile != "" {
 		_, err = os.Stat(e.WebVideoFile)
 		if err != nil {
-			glog.Errorln("File doesn't exist: ", e.WebVideoFile)
+			glog.Warningln("File doesn't exist: ", e.WebVideoFile)
 		} else {
 			err = os.Remove(e.WebVideoFile)
 			if err != nil {
