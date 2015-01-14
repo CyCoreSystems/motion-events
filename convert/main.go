@@ -18,10 +18,17 @@ type Event struct {
 	Id           string `bson:"_id"` // Meteor uses strings instead of ObjectIds
 	VideoFile    string `bson:"videoFile"`
 	WebVideoFile string `bson:"webVideoFile"`
+	ImageFile    string `bson:"imageFile"`
 }
 
 func main() {
 	flag.Parse()
+
+	// Clean up the server/db every 6 hours
+	go func() {
+		Cleanup(5, "172.30.105.140")
+		time.Sleep(6 * time.Hour)
+	}()
 
 	// Process videos every five minutes
 	for {
