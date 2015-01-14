@@ -98,7 +98,7 @@ func removeFromDB(id string, c *mgo.Collection) {
 
 }
 
-func checkAndRemove(e Event, c *mgo.Collection) error {
+func remove(e Event, c *mgo.Collection) {
 	var err error
 	// See what fields we have and remove them.
 	if e.VideoFile != "" {
@@ -109,7 +109,6 @@ func checkAndRemove(e Event, c *mgo.Collection) error {
 			err = os.Remove(e.VideoFile)
 			if err != nil {
 				glog.Errorln("Error deleting file: ", e.VideoFile)
-				return err
 			}
 		}
 	} else {
@@ -123,7 +122,6 @@ func checkAndRemove(e Event, c *mgo.Collection) error {
 			err = os.Remove(e.ImageFile)
 			if err != nil {
 				glog.Errorln("Error deleting file: ", e.ImageFile)
-				return err
 			}
 		}
 	} else {
@@ -137,7 +135,6 @@ func checkAndRemove(e Event, c *mgo.Collection) error {
 			err = os.Remove(e.WebVideoFile)
 			if err != nil {
 				glog.Errorln("Error deleting file: ", e.WebVideoFile)
-				return err
 			}
 		}
 	} else {
@@ -145,5 +142,4 @@ func checkAndRemove(e Event, c *mgo.Collection) error {
 	}
 	// Last thing to do is remove from DB.
 	removeFromDB(e.Id, c)
-	return nil
 }
