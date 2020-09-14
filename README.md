@@ -1,7 +1,7 @@
 cam event handler
 ===
 
-Receives events from `motion` and loads them into Redis.
+Receives events from GNU `motion` and loads them into Redis.
 
 The Redis schema contains three key patterns:
 

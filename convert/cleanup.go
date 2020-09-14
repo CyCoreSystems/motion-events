@@ -4,19 +4,20 @@ import (
 	"math"
 	"os"
 
-	"labix.org/v2/mgo"
-	"labix.org/v2/mgo/bson"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 
 	"github.com/golang/glog"
 	"github.com/ricochet2200/go-disk-usage/du"
 )
 
-func Cleanup(percent int, defaultPort string) {
+// cleanup executes cleanup routine, which deletes old
+// events if the disk is full
+func cleanup(percent int) {
 	// Before we do anything we need to make sure our usage warrants a clean up.
 	var err error
-	TestBool = true
-	if checkDiskSpace(percent) {
-		session := startConnection(defaultPort)
+	if isLowDiskSpace(percent) {
+		session := dbSession.Copy()
 		defer session.Close()
 
 		c := session.DB("cam").C("events")
@@ -33,7 +34,7 @@ func Cleanup(percent int, defaultPort string) {
 		e := Event{}
 		for iter.Next(&e) {
 			remove(e, c)
-			if !checkDiskSpace(percent) {
+			if !isLowDiskSpace(percent) {
 				break
 			}
 		}
@@ -42,29 +43,12 @@ func Cleanup(percent int, defaultPort string) {
 		if err != nil {
 			glog.Errorln("Failed to close event iterator:", err)
 		}
+
+		glog.Infoln("Completed cleanup deletions")
 	}
 }
 
-func startConnection(defaultPort string) *mgo.Session {
-	mgoHost := os.Getenv("MONGO_PORT_27017_TCP_ADDR")
-	mgoPort := os.Getenv("MONGO_PORT_27017_TCP_PORT")
-	mgoUri := mgoHost + ":" + mgoPort
-	if mgoUri == ":" {
-		mgoUri = defaultPort
-	}
-	glog.Infoln("MGO uri: ", mgoUri)
-	session, err := mgo.Dial(mgoUri)
-	if err != nil {
-		panic("Failed to connect to mongodb:" + err.Error())
-	}
-	glog.Infoln("Connected to mongodb")
-
-	return session
-}
-
-var TestBool bool
-
-func checkDiskSpace(perc int) bool {
+func isLowDiskSpace(perc int) bool {
 	// this sets us at the root directory
 	usage := du.NewDiskUsage("/")
 	// This returns the percentage of use.
@@ -98,8 +82,12 @@ func removeFromDB(id string, c *mgo.Collection) {
 
 }
 
+// remove delete all files and database entries of an event
 func remove(e Event, c *mgo.Collection) {
 	var err error
+
+	glog.Infof("Removing event (%+v)\n", e)
+
 	// See what fields we have and remove them.
 	if e.VideoFile != "" {
 		_, err = os.Stat(e.VideoFile)

@@ -9,9 +9,18 @@ import (
 
 	"github.com/golang/glog"
 
-	"labix.org/v2/mgo"
-	"labix.org/v2/mgo/bson"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
+
+// MongoDB Session handle
+var dbSession *mgo.Session
+
+const CleanupInterval time.Duration = 6 * time.Hour
+const ProcessInterval time.Duration = 5 * time.Minute
+
+// Minimum disk space free to maintain (%)
+const MinimumFree int = 15
 
 type Event struct {
 	//Id           bson.ObjectId `bson:"_id"`
@@ -24,16 +33,21 @@ type Event struct {
 func main() {
 	flag.Parse()
 
+	// Establish the MongoDB session
+	connectDb()
+
 	// Clean up the server/db every 6 hours
 	go func() {
-		Cleanup(5, "172.30.105.140")
-		time.Sleep(6 * time.Hour)
+		for {
+			cleanup(MinimumFree)
+			time.Sleep(CleanupInterval)
+		}
 	}()
 
 	// Process videos every five minutes
 	for {
 		process()
-		time.Sleep(time.Duration(5) * time.Minute)
+		time.Sleep(ProcessInterval)
 	}
 }
 
@@ -41,18 +55,8 @@ func main() {
 // video files which do not have webm video
 // files corresponding
 func process() {
-	mgoHost := os.Getenv("MONGO_PORT_27017_TCP_ADDR")
-	mgoPort := os.Getenv("MONGO_PORT_27017_TCP_PORT")
-	mgoUri := mgoHost + ":" + mgoPort
-	if mgoUri == ":" {
-		mgoUri = "172.30.105.140"
-	}
-	session, err := mgo.Dial(mgoUri)
-	if err != nil {
-		panic("Failed to connect to mongodb:" + err.Error())
-	}
+	session := dbSession.Copy()
 	defer session.Close()
-	glog.Infoln("Connected to mongodb")
 
 	c := session.DB("cam").C("events")
 	q := bson.M{
@@ -74,7 +78,7 @@ func process() {
 			glog.Errorln("Failed to update mongodb with webvideofile:", err)
 		}
 	}
-	err = iter.Close()
+	err := iter.Close()
 	if err != nil {
 		glog.Errorln("Failed to close event iterator:", err)
 	}
@@ -91,4 +95,23 @@ func convert(e *Event) (string, error) {
 		glog.Errorln("Error converting video file:", err)
 	}
 	return newFilename, err
+}
+
+// connectDb establishes a database connection pool session
+func connectDb() {
+	var err error
+	mgoHost := os.Getenv("MONGO_PORT_27017_TCP_ADDR")
+	mgoPort := os.Getenv("MONGO_PORT_27017_TCP_PORT")
+	mgoUri := mgoHost + ":" + mgoPort
+	if mgoUri == ":" {
+		mgoUri = "172.30.105.140"
+	}
+	for dbSession == nil {
+		dbSession, err = mgo.Dial(mgoUri)
+		if err != nil {
+			glog.Errorln("Failed to connect to MongoDB:", err)
+			time.Sleep(time.Duration(10) * time.Second)
+		}
+	}
+	glog.Infoln("Established MongoDB session")
 }
